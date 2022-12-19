@@ -146,7 +146,7 @@ public class GameWorkPanel extends JPanel implements Runnable {
 		
 		if (g2 != null) {
 			gameWork.draw(g2);
-			//print
+
 		}
 	}
 
