@@ -30,6 +30,9 @@ public class GameWork {
 	private String line;
 	
 	private int x, y;
+	
+	//temp1 la luot choi cua player nao
+	//temp la vi tri player do
 	public static int a=0 ,b=0 ,c=0 ,d=0, temp, temp1;
 	
 	private Random rand;
@@ -80,6 +83,57 @@ public class GameWork {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clickRoll();
+				
+				if ((a == 0 && temp1 == 1) ||
+					(b == 0 && temp1 == 2) ||
+					(c == 0 && temp1 == 3) ||
+					(d == 0 && temp1 == 4))
+				{
+					control.start();
+				}
+				else if (((a == 4 || a == 14 || a==18 || a == 25) && temp1 == 1) ||
+						 ((b == 4 || b == 14 || b==18 || b == 25) && temp1 == 2) ||
+						 ((c == 4 || c == 14 || c==18 || c == 25) && temp1 == 3) ||
+						 ((d == 4 || d == 14 || d==18 || d == 25) && temp1 == 4))
+				{
+					control.King();
+				}
+				else if ((a == 8 && temp1 == 1) ||
+						 (b == 8 && temp1 == 2) ||
+						 (c == 8 && temp1 == 3) ||
+						 (d == 8 && temp1 == 4))
+				{
+					control.BlackHole();
+				}
+				else if (((a == 12 || a == 20 || a==28) && temp1 == 1) ||
+						 ((b == 12 || b == 20 || b==28) && temp1 == 2) ||
+						 ((c == 12 || c == 20 || c==28) && temp1 == 3) ||
+						 ((d == 12 || d == 20 || d==28) && temp1 == 4))
+				{
+					control.lucky();
+				}
+				else if ((a == 16 && temp1 == 1) ||
+						 (b == 16 && temp1 == 2) ||
+						 (c == 16 && temp1 == 3) ||
+						 (d == 16 && temp1 == 4))
+				{
+					control.WorldCup();
+				}
+				else if ((a == 24 && temp1 == 1) ||
+						 (b == 24 && temp1 == 2) ||
+						 (c == 24 && temp1 == 3) ||
+						 (d == 24 && temp1 == 4))
+				{
+					control.teleport();
+				}
+				else if ((a == 30 && temp1 == 1) ||
+						 (b == 30 && temp1 == 2) ||
+						 (c == 30 && temp1 == 3) ||
+						 (d == 30 && temp1 == 4))
+				{
+					control.tax();
+				}
+				else control.init1();
 			}
 		});
 		
@@ -95,7 +149,7 @@ public class GameWork {
 		
 		if (isClickRoll == true && first == true)
 			turn = TurnFirst();
-		if (isClickRoll == true && first == false)
+		else if (isClickRoll == true && first == false)
 			if(BackGr2_Play.isClickPlayer4) {
 				TurnNext4();
 				
@@ -108,12 +162,10 @@ public class GameWork {
 				TurnNext2();
 				
 			}
-			
+		
 		control.setVisible(control.getVisi());
 		if(temp1 == 4) {
- 
-			temp = d;
-			
+ 			temp = d;
 		}
 		else if(temp1 == 3) {
 			temp = c;
@@ -124,7 +176,8 @@ public class GameWork {
 		}
 		else temp = a;
 		control.setBox(control.getMark()[temp]);
-		
+		control.setBuyBack();
+					
 	}
 	
 	public int TurnFirst() {
@@ -169,7 +222,7 @@ public class GameWork {
 				c=c+numRan1+numRan2;
 
 			}
-
+			temp1 = turnfirst;
 		}
 		
 		else if(BackGr2_Play.isClickPlayer2) {
@@ -189,7 +242,7 @@ public class GameWork {
 				b= b+ numRan1+numRan2;
 				
 			}
-			
+			temp1 = turnfirst;
 		}
 		
 		first = false;
@@ -272,7 +325,7 @@ public class GameWork {
 			g2.drawImage(person1, listTD.get(a).getX(), listTD.get(a).getY(), null);
 			g2.drawImage(person2, listTD.get(b).getX(), listTD.get(b).getY(), null);
 			g2.drawImage(person3, listTD.get(c).getX(), listTD.get(c).getY(), null);
-
+			
 		}
 		
 		if(BackGr2_Play.isClickPlayer4) {
@@ -283,5 +336,7 @@ public class GameWork {
 			
 		}
 	}
+	
+
 
 }

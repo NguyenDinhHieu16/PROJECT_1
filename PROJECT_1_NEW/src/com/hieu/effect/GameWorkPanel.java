@@ -45,18 +45,18 @@ public class GameWorkPanel extends JPanel implements Runnable {
 		 
 		this.setLayout(new BorderLayout());
 		
-		jLabel1 = new JLabel(GamePanel.jTextField1.getText(), new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/img1.png"), JLabel.LEFT);
-		jLabel2 = new JLabel(GamePanel.jTextField2.getText(), new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/img2.png"), JLabel.RIGHT);
-		jLabel3 = new JLabel(GamePanel.jTextField3.getText(), new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/img3.png"), JLabel.CENTER);
-		jLabel4 = new JLabel(GamePanel.jTextField4.getText(), new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/img4.png"), JLabel.CENTER);
+		jLabel1 = new JLabel(GamePanel.jTextField1.getText() + ": " + control.getWallet1(), new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/img1.png"), JLabel.LEFT);
+		jLabel2 = new JLabel(GamePanel.jTextField2.getText() + ": " + control.getWallet2(), new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/img2.png"), JLabel.RIGHT);
+		jLabel3 = new JLabel(GamePanel.jTextField3.getText() + ": " + control.getWallet3(), new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/img3.png"), JLabel.CENTER);
+		jLabel4 = new JLabel(GamePanel.jTextField4.getText() + ": " + control.getWallet4(), new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/img4.png"), JLabel.CENTER);
 		jLabel1.setForeground(Color.white);
 		jLabel2.setForeground(Color.white);
 		jLabel3.setForeground(Color.white);
 		jLabel4.setForeground(Color.white);
-		this.add(jLabel1,BorderLayout.WEST);
-		this.add(jLabel2, BorderLayout.EAST);
-		this.add(jLabel3, BorderLayout.NORTH);
-		this.add(jLabel4, BorderLayout.SOUTH);
+//		this.add(jLabel1,BorderLayout.WEST);
+//		this.add(jLabel2, BorderLayout.EAST);
+//		this.add(jLabel3, BorderLayout.NORTH);
+//		this.add(jLabel4, BorderLayout.SOUTH);
 		
 		jLabel1.setVisible(BackGr2_Play.isClickPlayer2);
 		jLabel2.setVisible(BackGr2_Play.isClickPlayer2);
@@ -146,6 +146,7 @@ public class GameWorkPanel extends JPanel implements Runnable {
 		
 		if (g2 != null) {
 			gameWork.draw(g2);
+			//print
 		}
 	}
 
@@ -161,6 +162,15 @@ public class GameWorkPanel extends JPanel implements Runnable {
 			
 			Render(g2d);
 			repaint();
+			
+			if (controller.drawN == true) {
+				System.out.println("123456  " + control.getWallet1());
+				jLabel1.setText(GamePanel.jTextField1.getText() + ": " + control.getWallet1());
+				jLabel2.setText(GamePanel.jTextField2.getText() + ": " + control.getWallet2());
+				jLabel3.setText(GamePanel.jTextField3.getText() + ": " + control.getWallet3());
+				jLabel4.setText(GamePanel.jTextField4.getText() + ": " + control.getWallet4());
+				controller.drawN = false;
+			}
 			
 			deltaTime = System.nanoTime() - beginTime;
 			sleepTime = period - deltaTime;
@@ -180,4 +190,5 @@ public class GameWorkPanel extends JPanel implements Runnable {
 		
 	}
 
+	
 }
