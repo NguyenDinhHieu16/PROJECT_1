@@ -82,7 +82,7 @@ public class controller extends JFrame implements ItemListener{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+//		
 //		jLabel1 = new JLabel("" + wallet1);
 //		jLabel2 = new JLabel("" + wallet2);
 //		jLabel3 = new JLabel("" + wallet3);
