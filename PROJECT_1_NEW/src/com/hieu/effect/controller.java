@@ -1,6 +1,7 @@
 package com.hieu.effect;
 
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.KeyStore.PrivateKeyEntry;
 import java.util.Arrays;
+import java.util.zip.CheckedOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -27,6 +29,7 @@ import javax.swing.JLayer;
 import javax.swing.JPanel;
 
 import com.hieu.userinterface.BackGr2_Play;
+import com.hieu.userinterface.GamePanel;
 
 public class controller extends JFrame implements ItemListener{
 
@@ -35,28 +38,34 @@ public class controller extends JFrame implements ItemListener{
 	private int cost_2[] = {0, 160, 160, 160, 200, 200, 200, 220, 0, 340, 340, 360, 0, 380, 200, 400, 50, 520, 200, 540, 0, 560, 560, 580, 50, 200, 700, 720, 0, 750, 0, 800};
 	private int cost_3[] = {0, 210, 210, 210, 200, 250, 250, 270, 0, 440, 440, 460, 0, 480, 200, 500, 50, 670, 200, 690, 0, 710, 710, 730, 50, 200, 900, 920, 0, 950, 0, 1000};
 	private int cost_4[] = {0, 360, 360, 360, 200, 400, 400, 420, 0, 690, 690, 710, 0, 730, 200, 750, 50, 1045, 200, 1065, 0, 1085, 1085, 1105, 50, 200, 1400, 1420, 0, 1450, 0, 1500};
+	public static int[] cost = new int[32];
 	
 	public static int wallet1 = 2000, wallet2 = 2000, wallet3 = 2000, wallet4 = 2000;
 	
-	private int check = 0;
+	private int check = 0, money = 0;
 	
-	private int[] mark = new int[33];//danh dau cap nha da mua
-	private int[] markTurn = new int[33];//danh dau vi tri da mua
+	public static int[] mark = new int[33];//danh dau cap nha da mua
+	public static int[] markTurn = new int[33];//danh dau vi tri da mua cua player nao
 	
 	private boolean visi = false;//set an hien jframe thong bao
 	private JPanel jPanel;
 	
 	private JButton jButton;
+
+	private JLabel jLabel;
 	
-	private int lose = 0, lose1, lose2, lose3, lose4;
+	private BufferedImage p1l0, p1l1, p1l2, p1l3;
+	private BufferedImage p2l0, p2l1, p2l2, p2l3;
+	private BufferedImage p3l0, p3l1, p3l2, p3l3;
+	private BufferedImage p4l0, p4l1, p4l2, p4l3;
+	
+	private int lose = 0;
 	private JCheckBox jCheckBox1, jCheckBox2, jCheckBox3, jCheckBox4;
 	
-	public static JLabel jLabel1, jLabel2, jLabel3, jLabel4;
+	public static boolean drawN = false, isLose = false;
 	
-	private Graphics2D g2;
-	private BufferedImage bufferedImage1;
-	public static boolean drawN = false;
-	
+	private String turnName;
+	private int black[] = {0, 0, 0, 0, 0};
 	
 	@Override
 	public Font getFont() {
@@ -72,50 +81,39 @@ public class controller extends JFrame implements ItemListener{
 		this.setSize(600, 400);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
+		this.add(jPanel);
+		
 		Arrays.fill(mark, -1);
 		Arrays.fill(markTurn, 0);
 		
-		g2 = (Graphics2D)jPanel.getGraphics();
 		try {
-			bufferedImage1 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/green1.png"));
+			p1l0 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/blue0.png"));
+			p1l1 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/blue1.png"));
+			p1l2 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/blue2.png"));
+			p1l3 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/blue3.png"));
+			
+			p2l0 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/green0.png"));
+			p2l1 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/green1.png"));
+			p2l2 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/green2.png"));
+			p2l3 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/green3.png"));
+			
+			p3l0 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/pink0.png"));
+			p3l1 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/pink1.png"));
+			p3l2 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/pink2.png"));
+			p3l3 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/pink3.png"));
+			
+			p4l0 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/yellow0.png"));
+			p4l1 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/yellow1.png"));
+			p4l2 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/yellow2.png"));
+			p4l3 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/yellow3.png"));
+			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-//		jLabel1 = new JLabel("" + wallet1);
-//		jLabel2 = new JLabel("" + wallet2);
-//		jLabel3 = new JLabel("" + wallet3);
-//		jLabel4 = new JLabel("" + wallet4);
-//		
-//		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-//        this.setLayout(layout);
-//		
-//		layout.setHorizontalGroup(
-//	            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//	            .addGroup(layout.createSequentialGroup()
-//	                    .addGap(600)
-//	                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-//	                        .addComponent(jLabel2)
-//	                        .addComponent(jLabel1))
-//	                    .addContainerGap(188, Short.MAX_VALUE))
-//	                .addGroup(layout.createSequentialGroup()
-//	                    .addComponent(jLabel3)
-//	                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//	                    .addComponent(jLabel4))
-//	        );
-//	        layout.setVerticalGroup(
-//	            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-//	            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-//	                    .addComponent(jLabel2)
-//	                    .addGap(275)
-//	                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-//	                        .addComponent(jLabel3)
-//	                        .addComponent(jLabel4))
-//	                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, Short.MAX_VALUE)
-//	                    .addComponent(jLabel1))
-//	        );
-		
+		jLabel = new JLabel();
+		jLabel.setText("2 3 con muc");
 		
 		jButton = new JButton("DON'T UP");
 		jButton.addActionListener(new ActionListener() {
@@ -123,168 +121,442 @@ public class controller extends JFrame implements ItemListener{
 			public void actionPerformed(ActionEvent e) {
 				setVisi(false);
 				setVisible(visi);
-				markTurn[GameWork.temp] = GameWork.temp1;
-				mark[GameWork.temp] = checkbox();
-				loseMoney();
-				drawN = true;
-//				output(mark, 33);
-//				output(markTurn, 33);
+				if (jButton.getText() == "BUY CARD FOR 200") {
+					if (markTurn[GameWork.temp] == 0) {
+						markTurn[GameWork.temp] = GameWork.temp1;
+						mark[GameWork.temp] = 1;
+					}
+					else if (markTurn[GameWork.temp] == GameWork.temp1) {
+						jButton.setText("OF U");
+					}
+					else if (markTurn[GameWork.temp] != GameWork.temp1) {
+						jButton.setText("U lost money");
+					}
+				}
 				
+				else if (jButton.getText() == "YOU COME BLACK HOLE") {
+					black[GameWork.temp1] = 1;
+				}
+				
+				else {
+					markTurn[GameWork.temp] = GameWork.temp1;
+					mark[GameWork.temp] = checkbox();
+				}
+				buyMoney();
+				drawN = true;
+				setCost();
 			}
 		});
-		
-//		jCheckBox1 = new JCheckBox(new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/house1.png"));
-//		jCheckBox2 = new JCheckBox(new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/house2.png"));
-//		jCheckBox3 = new JCheckBox(new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/house3.png"));
-//		jCheckBox4 = new JCheckBox(new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/land.png"));
 		
 		
 		jCheckBox1 = createCheckBox("Land");
 		jCheckBox2 = createCheckBox("House1");
 		jCheckBox3 = createCheckBox("House2");
 		jCheckBox4 = createCheckBox("House3");
-		
+		this.init();
         this.setVisible(visi);
 	
 	}
 	
-	public void draw(Graphics2D g2) {
-		g2.drawImage(bufferedImage1, 100, 100, null);
+	public void workBlack(int t) {
+		black[t] = 1;
 	}
 	
-	//voi o khong co chuc nang
-	public void init1() {
-		jPanel.removeAll();
-		this.add(jPanel);
-//		jPanel.setLayout(new FlowLayout());
+	public void setCost() {
+		for (int i = 0; i<32; i++) {
+			if (mark[i] == 0) {
+				cost[i] = cost_0[i];
+			}
+			else if (mark[i] == 1) {
+				cost[i] = cost_1[i];
+			}
+			else if (mark[i] == 2) {
+				cost[i] = cost_2[i];
+			}
+			else if (mark[i] == 3) {
+				cost[i] = cost_3[i];
+			}
+		}
+	}
+	
+	public void draw(Graphics2D g2) {
+		
+		
+		for (int i= 0; i < 32; i++) {
+			if (markTurn[i] == 0) continue;
+			else if (markTurn[i] == 1) {
+				switch (mark[i]) {
+				case 0:
+				{
+					g2.drawImage(p1l0, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 1:
+				{
+					g2.drawImage(p1l1, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 2:
+				{
+					g2.drawImage(p1l2, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 3:
+				{
+					g2.drawImage(p1l3, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+
+				default:
+					break;
+				}
+			}
+			else if (markTurn[i] == 2) {
+				switch (mark[i]) {
+				case 0:
+				{
+					g2.drawImage(p2l0, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 1:
+				{
+					g2.drawImage(p2l1, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 2:
+				{
+					g2.drawImage(p2l2, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 3:
+				{
+					g2.drawImage(p2l3, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+
+				default:
+					break;
+				}
+			}
+			
+			else if (markTurn[i] == 3) {
+				switch (mark[i]) {
+				case 0:
+				{
+					g2.drawImage(p3l0, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 1:
+				{
+					g2.drawImage(p3l1, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 2:
+				{
+					g2.drawImage(p3l2, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 3:
+				{
+					g2.drawImage(p3l3, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+
+				default:
+					break;
+				}
+			}
+			else if (markTurn[i] == 4) {
+				switch (mark[i]) {
+				case 0:
+				{
+					g2.drawImage(p4l0, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 1:
+				{
+					g2.drawImage(p4l1, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 2:
+				{
+					g2.drawImage(p4l2, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+				
+				case 3:
+				{
+					g2.drawImage(p4l3, GameWork.listTD.get(i).getX(), GameWork.listTD.get(i).getY(), null);
+					break;
+				}
+
+				default:
+					break;
+				}
+			}
+		}
+	}
+	
+	public void init() {
 		jPanel.add(Box.createRigidArea(new Dimension(600, 25)));
+		jPanel.add(jLabel);
+		jPanel.add(Box.createRigidArea(new Dimension(600, 50)));
 		jPanel.add(jCheckBox1);
 		jPanel.add(jCheckBox2);
 		jPanel.add(jCheckBox3);
 		jPanel.add(jCheckBox4);
 		jPanel.add(Box.createRigidArea(new Dimension(600, 50)));
-	    jButton.setText("DON'T UP");
+	  
         jPanel.add(jButton);
-        this.add(jPanel);
-        this.repaint();
+	}
+	
+	
+	//voi o khong co chuc nang
+	public void init1() {
+	
+	    jButton.setText("DON'T UP");
+	    jCheckBox1.setVisible(true);
+	    jCheckBox2.setVisible(true);
+	    jCheckBox3.setVisible(true);
+	    jCheckBox4.setVisible(true);
+ 
 	}
 	
 	//tru tiwn khi mua
-	public void loseMoney() {
+	public void buyMoney() {
 		if (GameWork.temp1 == 1) { 
 			this.wallet1 -= lose;
-			System.out.println(wallet1);
-			lose1 = lose;
+			
 		}
 		else if (GameWork.temp1 == 2) { 
 			this.wallet2 -= lose;
-			System.out.println(wallet2);
-			lose2 = lose;
+			
+			
 		}
 		else if (GameWork.temp1 == 3) { 
 			this.wallet3 -= lose;
-			System.out.println(wallet3);
-			lose3 = lose;
+		
+			
 		}
 		else if (GameWork.temp1 == 4) { 
 			this.wallet4 -= lose;
-			System.out.println(wallet4);
-			lose4 = lose;
+			
+			
 		}
-		System.out.println(lose);
+	
+	}
+	
+	//tru tien khi di vao o  doi thu khac
+	public void loseMoney() {
+		isLose = true;
+		if (GameWork.temp1 == 1 && markTurn[GameWork.a] != GameWork.temp1 && markTurn[GameWork.a] != 0) {
+				this.money = setLoseMoneyLevel(mark[GameWork.a], GameWork.a);
+				this.wallet1 -= this.money;
+				addSub(markTurn[GameWork.a], this.money);
+				return;
+		}
+		if (GameWork.temp1 == 2 && markTurn[GameWork.b] != GameWork.temp1 && markTurn[GameWork.b] != 0) {
+			this.money = setLoseMoneyLevel(mark[GameWork.b], GameWork.b);
+			this.wallet2 -= this.money;
+			addSub(markTurn[GameWork.b], this.money);
+			return;
+		}
+		if (GameWork.temp1 == 3 && markTurn[GameWork.c] != GameWork.temp1 && markTurn[GameWork.c] != 0) {
+			this.money = setLoseMoneyLevel(mark[GameWork.c], GameWork.c);
+			this.wallet3 -= this.money;
+			addSub(markTurn[GameWork.c], this.money);
+			return;
+		}
+		if (GameWork.temp1 == 4 && markTurn[GameWork.d] != GameWork.temp1 && markTurn[GameWork.d] != 0) {
+			this.money = setLoseMoneyLevel(mark[GameWork.d], GameWork.d);
+			this.wallet4 -= this.money;
+			addSub(markTurn[GameWork.d], this.money);
+			return;
+		}
+		isLose = false;
+		
+	}
+	
+	public void addSub(int t, int m) {
+		switch (t) {
+		case 1: {
+			this.wallet1 += m;
+			break;
+		}
+			
+		case 2: {
+			this.wallet2 += m;
+			break;
+		}
+			
+		case 3: {
+			this.wallet3 += m;
+			break;
+		}
+		
+		case 4: {
+			this.wallet4 += m;
+			break;
+		}
+			
+		default:
+			break;
+		}
+	}
+	
+	public int setLoseMoneyLevel(int x, int y) {
+		int money = 0;
+		switch (x) {
+		case 0:
+		{
+			money = cost_0[y]*10/100 + cost_0[y];	
+			break;
+		}
+		
+		case 1:
+		{
+			money = cost_1[y]*20/100 + cost_1[y];
+			break;
+		}
+		
+		case 2:
+		{
+			money = cost_2[y]*30/100 + cost_2[y];
+			break;
+		}
+		
+		case 3:
+		{
+			money = cost_3[y]*20/100 + cost_3[y];
+			break;
+		}
+		
+		case 4:
+		{
+			money = cost_4[y]*20/100 + cost_4[y];
+			break;
+		}
+
+		default:
+			break;
+		}
+		return money;
+	}
+	
+	public void cantUp(int u, int v) {
+		if (u != markTurn[v]) {
+			if (u == 1 && wallet1 < cost[v]) {
+				jButton.setText("CANT BUY");
+				jCheckBox1.setVisible(false);
+			    jCheckBox2.setVisible(false);
+			    jCheckBox3.setVisible(false);
+			    jCheckBox4.setVisible(false);
+			}
+			else if (u == 2 && wallet2 < cost[v]) {
+				jButton.setText("CANT BUY");
+				jCheckBox1.setVisible(false);
+			    jCheckBox2.setVisible(false);
+			    jCheckBox3.setVisible(false);
+			    jCheckBox4.setVisible(false);
+			}
+			else if (u == 3 && wallet3 < cost[v]) {
+				jButton.setText("CANT BUY");
+				jCheckBox1.setVisible(false);
+			    jCheckBox2.setVisible(false);
+			    jCheckBox3.setVisible(false);
+			    jCheckBox4.setVisible(false);
+			}
+			else if (u == 4 && wallet4 < cost[v]) {
+				jButton.setText("CANT BUY");
+				jCheckBox1.setVisible(false);
+			    jCheckBox2.setVisible(false);
+			    jCheckBox3.setVisible(false);
+			    jCheckBox4.setVisible(false);
+			}
+		}
 	}
 	
 	//o start
 	public void start() {
-		jPanel.removeAll();
-//		jPanel.add(Box.createRigidArea(new Dimension(600, 100)));
+	
 		jButton.setText("YOU COME START");
-		jPanel.add(jButton);
-		this.add(jPanel);
-	    this.repaint();
+		jCheckBox1.setVisible(false);
+	    jCheckBox2.setVisible(false);
+	    jCheckBox3.setVisible(false);
+	    jCheckBox4.setVisible(false);
+	
 	}
 	
 	//o K, I, N, G
 	public void King() {
-		jPanel.removeAll();
-//		jPanel.add(Box.createRigidArea(new Dimension(600, 100)));
 		jButton.setText("BUY CARD FOR 200");
-		jPanel.add(jButton);
-		this.add(jPanel);
-	    this.repaint();
+		jCheckBox1.setVisible(false);
+	    jCheckBox2.setVisible(false);
+	    jCheckBox3.setVisible(false);
+	    jCheckBox4.setVisible(false);
 	}
 	
 	//voi o lo den vu tru
 	public void BlackHole() {
-		jPanel.removeAll();
-//		jPanel.add(Box.createRigidArea(new Dimension(600, 100)));
+	
 		jButton.setText("YOU COME BLACK HOLE");
-	    jPanel.add(jButton);
-		this.add(jPanel);
-		this.repaint();
+		jCheckBox1.setVisible(false);
+	    jCheckBox2.setVisible(false);
+	    jCheckBox3.setVisible(false);
+	    jCheckBox4.setVisible(false);
 	}
 	
 	// o may man
 	public void lucky() {
-		jPanel.removeAll();
-//		jPanel.add(Box.createRigidArea(new Dimension(600, 100)));
+
 		jButton.setText("YOUR ROOL LUCKY");
-	    jPanel.add(jButton);
-		this.add(jPanel);
-		this.repaint();
+		jCheckBox1.setVisible(false);
+	    jCheckBox2.setVisible(false);
+	    jCheckBox3.setVisible(false);
+	    jCheckBox4.setVisible(false);
 	}
 	
 	//o world cup
 	public void WorldCup() {
-		jPanel.removeAll();
-//		jPanel.add(Box.createRigidArea(new Dimension(600, 100)));
+	
 		jButton.setText("YOU WANT TO BUY WORLD CUP FOR 50");
-	    jPanel.add(jButton);
-		this.add(jPanel);
-		this.repaint();
+		jCheckBox1.setVisible(false);
+	    jCheckBox2.setVisible(false);
+	    jCheckBox3.setVisible(false);
+	    jCheckBox4.setVisible(false);
 	}
 	
 	//o teleport
 	public void teleport() {
-		jPanel.removeAll();
-//		jPanel.add(Box.createRigidArea(new Dimension(600, 100)));
+	
 		jButton.setText("YOU WANT TO TELEPORT");
-	    this.repaint();
-	    jPanel.add(jButton);
-		this.add(jPanel);
+		jCheckBox1.setVisible(false);
+	    jCheckBox2.setVisible(false);
+	    jCheckBox3.setVisible(false);
+	    jCheckBox4.setVisible(false);
 	}
 	
 	//nop thue
 	public void tax() {
-		jPanel.removeAll();
-//		jPanel.add(Box.createRigidArea(new Dimension(600, 100)));
+		
 		jButton.setText("YOU NEED TAX");
-	    this.repaint();
-	    jPanel.add(jButton);
-		this.add(jPanel);
+		jCheckBox1.setVisible(false);
+	    jCheckBox2.setVisible(false);
+	    jCheckBox3.setVisible(false);
+	    jCheckBox4.setVisible(false);
 	}
 	
-	public void output(int[] mark, int n) {
-		for (int i= 0 ;i <n; i++) {
-			System.out.print(mark[i]+" ");
-		}
-		System.out.println();
-	}
-	
-//	public void setVistWithTurn() {
-//		if (GameWork.temp1 == 1) {
-//			markTurn[GameWork.temp] = 1;
-//		}
-//		if (GameWork.temp1 == 2) {
-//			markTurn[GameWork.temp] = 2;
-//		}
-//		if (GameWork.temp1 == 3) {
-//			markTurn[GameWork.temp] = 3;
-//		}
-//		if (GameWork.temp1 == 1) {
-//			markTurn[GameWork.temp] = 1;
-//		}
-//	}
 	
 	public void setBox(int i) {
 		if (i == -1) {
@@ -442,6 +714,44 @@ public class controller extends JFrame implements ItemListener{
 	
 	}
 	
+	public void setTurnName() {
+		if (GameWork.temp1 == 1) {
+			turnName = GamePanel.jTextField1.getText();
+		}
+		else if (GameWork.temp1 == 2) {
+			turnName = GamePanel.jTextField2.getText();
+		}
+		else if (GameWork.temp1 == 3) {
+			turnName = GamePanel.jTextField3.getText();
+		}
+		else if (GameWork.temp1 == 4) {
+			turnName = GamePanel.jTextField4.getText();
+		}
+		else turnName = "nguyen dinh hieu";
+		
+		jLabel.setText("Turn player " + turnName);
+	}
+	
+	public int losePlayer() {
+		if (wallet1 < 0) return 1;
+		if (wallet2 < 0) return 2;
+		if (wallet3 < 0) return 3;
+		if (wallet4 < 0) return 4;
+		return 0;
+	}
+	
+	public int[] getBlack() {
+		return black;
+	}
+
+	public void setBlack(int n, int index) {
+		this.black[index] = n;
+	}
+
+	public String getTurnName() {
+		return turnName;
+	}
+	
 	public int[] getMark() {
 		return mark;
 	}
@@ -467,38 +777,6 @@ public class controller extends JFrame implements ItemListener{
 		this.markTurn[x] = y;
 	}
 
-	public int getWallet1() {
-		return wallet1;
-	}
-
-	public void setWallet1(int wallet1) {
-		this.wallet1 = wallet1;
-	}
-
-	public int getWallet2() {
-		return wallet2;
-	}
-
-	public void setWallet2(int wallet2) {
-		this.wallet2 = wallet2;
-	}
-
-	public int getWallet3() {
-		return wallet3;
-	}
-
-	public void setWallet3(int wallet3) {
-		this.wallet3 = wallet3;
-	}
-
-	public int getWallet4() {
-		return wallet4;
-	}
-
-	public void setWallet4(int wallet4) {
-		this.wallet4 = wallet4;
-	}
-
 	public int getLose() {
 		return lose;
 	}
@@ -506,39 +784,5 @@ public class controller extends JFrame implements ItemListener{
 	public void setLose(int lose) {
 		this.lose = lose;
 	}
-
-	public int getLose1() {
-		return lose1;
-	}
-
-	public void setLose1(int lose1) {
-		this.lose1 = lose1;
-	}
-
-	public int getLose2() {
-		return lose2;
-	}
-
-	public void setLose2(int lose2) {
-		this.lose2 = lose2;
-	}
-
-	public int getLose3() {
-		return lose3;
-	}
-
-	public void setLose3(int lose3) {
-		this.lose3 = lose3;
-	}
-
-	public int getLose4() {
-		return lose4;
-	}
-
-	public void setLose4(int lose4) {
-		this.lose4 = lose4;
-	}
-	
-	
 	
 }

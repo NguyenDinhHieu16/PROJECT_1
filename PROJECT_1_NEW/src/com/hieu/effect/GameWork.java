@@ -11,21 +11,25 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.zip.CheckedOutputStream;
 
 import javax.imageio.ImageIO;
 
 import com.hieu.userinterface.BackGr2_Play;
+import com.hieu.userinterface.GamePanel;
 
 public class GameWork {
 
 	private BufferedImage imgBgr;
 	private BufferedImage person1, person2, person3, person4;
 	
+
+	
 	private FileReader fr;
 	private BufferedReader br;
 	
 	private point tdImg;
-	private ArrayList<point> listTD;
+	public static ArrayList<point> listTD;
 	
 	private String line;
 	
@@ -34,6 +38,7 @@ public class GameWork {
 	//temp1 la luot choi cua player nao
 	//temp la vi tri player do
 	public static int a=0 ,b=0 ,c=0 ,d=0, temp, temp1;
+	private int t;
 	
 	private Random rand;
 	private int numRan1, numRan2, turn, turnfirst;
@@ -41,6 +46,7 @@ public class GameWork {
 	private controller control = new controller();
 	
 	public boolean isClickRoll, first = true;
+	private int black[] = {3, 3, 3, 3, 3};
 	
 	public GameWork() {
 		
@@ -51,7 +57,7 @@ public class GameWork {
 			person2 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/play2.png"));
 			person3 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/play3.png"));
 			person4 = ImageIO.read(new File("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/play4.png"));
-			
+					
 			fr = new FileReader("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\data/td.txt");
 			br =new BufferedReader(fr);
 			
@@ -83,6 +89,7 @@ public class GameWork {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clickRoll();
+				control.loseMoney();
 				
 				if ((a == 0 && temp1 == 1) ||
 					(b == 0 && temp1 == 2) ||
@@ -133,7 +140,23 @@ public class GameWork {
 				{
 					control.tax();
 				}
-				else control.init1();
+				else if (control.isLose == false) 
+					control.init1();
+				control.isLose = true;
+				control.setTurnName();
+				
+				if (temp1 == 1) {
+					control.cantUp(1, a);
+				}
+				else if (temp1 ==2) {
+					control.cantUp(2, b);
+				}
+				else if (temp1 == 3) {
+					control.cantUp(3, c);
+				}
+				else if (temp1 == 4) {
+					control.cantUp(4, d);
+				}
 			}
 		});
 		
@@ -157,11 +180,12 @@ public class GameWork {
 			else if(BackGr2_Play.isClickPlayer3) {
 				TurnNext3();
 
-		}
+			}
 			else if(BackGr2_Play.isClickPlayer2) {
 				TurnNext2();
 				
 			}
+			
 		
 		control.setVisible(control.getVisi());
 		if(temp1 == 4) {
@@ -201,7 +225,7 @@ public class GameWork {
 				d=d+numRan1+numRan2;
 				
 			}
-			temp1 = turnfirst;
+
 		}
 		
 		else if(BackGr2_Play.isClickPlayer3) {
@@ -222,7 +246,6 @@ public class GameWork {
 				c=c+numRan1+numRan2;
 
 			}
-			temp1 = turnfirst;
 		}
 		
 		else if(BackGr2_Play.isClickPlayer2) {
@@ -242,9 +265,8 @@ public class GameWork {
 				b= b+ numRan1+numRan2;
 				
 			}
-			temp1 = turnfirst;
 		}
-		
+		temp1 = turnfirst;
 		first = false;
 		return turnfirst;
 	}
@@ -267,11 +289,16 @@ public class GameWork {
 	}
 	
 	public void TurnNext3() {
-		turn++;
 		
-		if (turn == 4) {
-			turn = 1;
+		do {
+			turn++;
+			
+			if (turn == 4) {
+				turn = 1;
+			}
 		}
+		while (control.losePlayer() != 0);
+		
 		if (turn == 1) {
 			a+=numRan1+numRan2;
 			if (a > 31) a = a % 31 -1;
@@ -288,11 +315,18 @@ public class GameWork {
 	}
 	
 	public void TurnNext4() {
-		turn++;
 		
-		if (turn == 5) {
-			turn = 1;
+		do {
+			turn++;
+			
+			if (turn == 5) {
+				turn = 1;
+			}
 		}
+		while (control.losePlayer() != 0);
+		
+		
+	
 		if (turn == 1) {
 			a+=numRan1+numRan2;
 			if (a > 31) a = a % 31 -1;
@@ -311,6 +345,21 @@ public class GameWork {
 		}
 		temp1 = turn;
 	}
+	
+//	public void workBlack() {
+//		
+//		if (control.getBlack()[temp1] == 1) {
+//			if (black[temp1] != 0) {
+//				turnNext();
+//				black[temp1]--;
+//			}
+//			else {
+//				black[temp1] = 3;
+//				control.setBlack(0, temp1);
+//			}
+//			
+//		}
+//	}
 	
 	public void draw(Graphics2D g2) {
 		g2.drawImage(imgBgr, 0, 0, null);
@@ -335,8 +384,9 @@ public class GameWork {
 			g2.drawImage(person4, listTD.get(d).getX(), listTD.get(d).getY(), null);
 			
 		}
+		
+		
 	}
+
 	
-
-
 }
