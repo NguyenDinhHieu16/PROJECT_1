@@ -26,6 +26,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayer;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -181,17 +182,19 @@ public class controller extends JFrame implements ItemListener{
 				}
 				
 				else {
-					if (markTurn[GameWork.temp] == 0) {
+					if (markTurn[GameWork.temp] == GameWork.temp1) {
+						lose = 0;
+					}
+					else if (markTurn[GameWork.temp] == 0) {
 						markTurn[GameWork.temp] = GameWork.temp1;
 						mark[GameWork.temp] = checkbox();
-					}
-					else if (markTurn[GameWork.temp] == GameWork.temp1) {
-						lose = 0;
 					}
 				}
 				buyMoney();
 				drawN = true;
 				setCost();
+				
+				win();
 			}
 		});
 		
@@ -814,7 +817,30 @@ public class controller extends JFrame implements ItemListener{
 		return 0;
 	}
 	
-	
+	public void win() {
+		if ((markTurn[4] == markTurn[14] && markTurn[14] == markTurn[18] && markTurn[14] == markTurn[25] && markTurn[4] != 0)) {
+			JFrame frame = new JFrame("JOptionPane showMessageDialog example");
+	        JOptionPane.showMessageDialog(frame,
+	                "Player " + markTurn[4] + " Wins",
+	                "WIN",
+	                JOptionPane.INFORMATION_MESSAGE);
+		}
+		int d = 0;
+		int win = 0;
+		for (int i = 1; i<5; i++) {
+			if (lostPlayer[i] == 1) {
+				d++;
+			}
+			else win = i;
+		}
+		if (d == 3) {
+			JFrame frame = new JFrame("JOptionPane showMessageDialog example");
+	        JOptionPane.showMessageDialog(frame,
+	        		"Player " + win + " Wins",
+	                "WIN",
+	                JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
 	
 	public int[] getLostPlayer() {
 		return lostPlayer;
