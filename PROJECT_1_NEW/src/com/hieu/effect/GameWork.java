@@ -132,6 +132,31 @@ public class GameWork {
 						 (d == 24 && temp1 == 4))
 				{
 					control.teleport();
+					
+//					switch (temp1) {
+//					case 1: {
+//						a = control.workTele();
+//						break;
+//					}
+//					
+//					case 2: {
+//						b = control.workTele();
+//						break;
+//					}
+//					
+//					case 3: {
+//						c = control.workTele();
+//						break;
+//					}
+//					
+//					case 4: {
+//						d = control.workTele();
+//						break;
+//					}	
+//
+//					default:
+//						break;
+//					}
 				}
 				else if ((a == 30 && temp1 == 1) ||
 						 (b == 30 && temp1 == 2) ||
@@ -157,6 +182,7 @@ public class GameWork {
 				else if (temp1 == 4) {
 					control.cantUp(4, d);
 				}
+				
 			}
 		});
 		
@@ -277,6 +303,23 @@ public class GameWork {
 		if (turn == 3) {
 			turn = 1;
 		}
+		
+		if (control.losePlayer() == 1) {
+			if (control.getLostPlayer()[turn] == 1) {
+				TurnNext2();
+				return;
+			}
+		}
+		
+		if (control.getBlack()[turn] == 1 && black[turn] != 0) {
+			black[turn]--;
+			TurnNext2();
+			return;
+		}
+		if (black[turn] ==0) {
+			black[turn] = 3;
+		}
+		
 		if (turn == 1) {
 			a+=numRan1+numRan2;
 			if (a > 31) a = a % 31 -1;
@@ -290,14 +333,27 @@ public class GameWork {
 	
 	public void TurnNext3() {
 		
-		do {
-			turn++;
-			
-			if (turn == 4) {
-				turn = 1;
+		turn++;
+		
+		if (turn == 4) {
+			turn = 1;
+		}
+		
+		if (control.losePlayer() == 1) {
+			if (control.getLostPlayer()[turn] == 1) {
+				TurnNext3();
+				return;
 			}
 		}
-		while (control.losePlayer() != 0);
+		
+		if (control.getBlack()[turn] == 1 && black[turn] != 0) {
+			black[turn]--;
+			TurnNext3();
+			return;
+		}
+		if (black[turn] ==0) {
+			black[turn] = 3;
+		}
 		
 		if (turn == 1) {
 			a+=numRan1+numRan2;
@@ -316,16 +372,27 @@ public class GameWork {
 	
 	public void TurnNext4() {
 		
-		do {
-			turn++;
-			
-			if (turn == 5) {
-				turn = 1;
+		turn++;
+		
+		if (turn == 5) {
+			turn = 1;
+		}
+		
+		if (control.losePlayer() == 1) {
+			if (control.getLostPlayer()[turn] == 1) {
+				TurnNext4();
+				return;
 			}
 		}
-		while (control.losePlayer() != 0);
 		
-		
+		if (control.getBlack()[turn] == 1 && black[turn] != 0) {
+			black[turn]--;
+			TurnNext4();
+			return;
+		}
+		if (black[turn] ==0) {
+			black[turn] = 3;
+		}
 	
 		if (turn == 1) {
 			a+=numRan1+numRan2;

@@ -38,8 +38,6 @@ public class GamePanel extends JPanel implements Runnable {
 		
 	
 	//here
-
-//		private JLabel jLabel = new JLabel(new ImageIcon("C:\\Users\\HieuNGUYXN\\eclipse-workspace\\PROJECT_1_NEW\\imageBackground/start.png"));
 	public static JTextField jTextField1 = new JTextField(6);
 	public static JTextField jTextField2 = new JTextField(6);
 	public static JTextField jTextField3 = new JTextField(6);
@@ -56,7 +54,6 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public GamePanel() {
 		
-//		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		jTextField1.setBackground(Color.green);
 		jTextField2.setBackground(Color.pink);
 		jTextField3.setBackground(Color.yellow);
@@ -72,9 +69,6 @@ public class GamePanel extends JPanel implements Runnable {
 		this.add(Box.createRigidArea(new Dimension(250, 25)));
 		
 		
-		
-//		jTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		//this.add(jLabel);
 		this.add(jTextField1);
 		
 		this.add(jTextField2);
@@ -117,15 +111,7 @@ public class GamePanel extends JPanel implements Runnable {
 			BackGr2_Play.isClickPlayer3 = true;
 		}
 	}
-//	public void eventClickPlay() {
-//		bgr1.setVisible(false);
-//		bgr2.setVisible(true);
-//	}
-//	
-//	public void eventClickBack() {
-//		bgr1.setVisible(true);
-//		bgr2.setVisible(false);
-//	}
+
 	
 	public void RenderBgr() {
 		
@@ -145,19 +131,6 @@ public class GamePanel extends JPanel implements Runnable {
 		
 	}
 	
-//	public void RenderBgr2_Play() {
-//			
-//			if (bufferedImage == null) {
-//				bufferedImage = new BufferedImage(1366, 768, BufferedImage.TYPE_INT_ARGB);
-//			}
-//			if (bufferedImage != null) {
-//				g2 = (Graphics2D) bufferedImage.getGraphics();
-//			}
-//			if (g2 != null) {
-//				bgr2.draw(g2);
-//			}
-//			
-//	}
 	
 	public void startGame() {
 		isRunning = true;
@@ -261,30 +234,6 @@ public class GamePanel extends JPanel implements Runnable {
 //		}
 //		
 //	}
-//
-//	@Override
-//	public void mousePressed(MouseEvent e) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void mouseReleased(MouseEvent e) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void mouseEntered(MouseEvent e) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void mouseExited(MouseEvent e) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//		
+	
 
 }

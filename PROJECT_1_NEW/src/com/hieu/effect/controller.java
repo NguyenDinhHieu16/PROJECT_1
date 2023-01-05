@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayer;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.hieu.userinterface.BackGr2_Play;
 import com.hieu.userinterface.GamePanel;
@@ -34,7 +35,7 @@ import com.hieu.userinterface.GamePanel;
 public class controller extends JFrame implements ItemListener{
 
 	private int cost_0[] = {0, 60, 60, 60, 200, 100, 100, 120, 0, 140, 140, 160, 0, 180, 200, 200, 50, 220, 200, 240, 0, 260, 260, 280, 50, 200, 300, 320, 0, 350, 0, 400};
-	private int cost_1[] = {0, 110, 110, 110, 200, 150, 150, 170, 200, 240, 240, 260, 0, 280, 200, 300, 50, 370, 200, 390, 0, 410, 410, 430, 50, 200, 500, 520, 0, 550, 0, 600};
+	private int cost_1[] = {0, 110, 110, 110, 200, 150, 150, 170, 0, 240, 240, 260, 0, 280, 200, 300, 50, 370, 200, 390, 0, 410, 410, 430, 50, 200, 500, 520, 0, 550, 0, 600};
 	private int cost_2[] = {0, 160, 160, 160, 200, 200, 200, 220, 0, 340, 340, 360, 0, 380, 200, 400, 50, 520, 200, 540, 0, 560, 560, 580, 50, 200, 700, 720, 0, 750, 0, 800};
 	private int cost_3[] = {0, 210, 210, 210, 200, 250, 250, 270, 0, 440, 440, 460, 0, 480, 200, 500, 50, 670, 200, 690, 0, 710, 710, 730, 50, 200, 900, 920, 0, 950, 0, 1000};
 	private int cost_4[] = {0, 360, 360, 360, 200, 400, 400, 420, 0, 690, 690, 710, 0, 730, 200, 750, 50, 1045, 200, 1065, 0, 1085, 1085, 1105, 50, 200, 1400, 1420, 0, 1450, 0, 1500};
@@ -50,7 +51,7 @@ public class controller extends JFrame implements ItemListener{
 	private boolean visi = false;//set an hien jframe thong bao
 	private JPanel jPanel;
 	
-	private JButton jButton;
+	private JButton jButton, jButton1;
 
 	private JLabel jLabel;
 	
@@ -66,6 +67,9 @@ public class controller extends JFrame implements ItemListener{
 	
 	private String turnName;
 	private int black[] = {0, 0, 0, 0, 0};
+	private int lostPlayer[] = {0, 0, 0, 0, 0};
+//	private JTextField jTextField = new JTextField(6);
+	private int tele;
 	
 	@Override
 	public Font getFont() {
@@ -116,6 +120,17 @@ public class controller extends JFrame implements ItemListener{
 		jLabel.setText("2 3 con muc");
 		
 		jButton = new JButton("DON'T UP");
+		jButton1 = new JButton("CANT BUY");
+		jButton1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				setVisi(false);
+				setVisible(visi);
+			}
+		});
+		
 		jButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -135,12 +150,44 @@ public class controller extends JFrame implements ItemListener{
 				}
 				
 				else if (jButton.getText() == "YOU COME BLACK HOLE") {
-					black[GameWork.temp1] = 1;
+//					if (GameWork.temp1 == 1) {
+//						wallet1-= 50;
+//					}
+//					else if (GameWork.temp1 == 2) {
+//						wallet2-= 50;
+//					}
+//					else if (GameWork.temp1 == 3) {
+//						wallet3-= 50;
+//					}
+//					else if (GameWork.temp1 == 4) {
+//						wallet4-= 50;
+//					}
+				}
+				
+				else if (jButton.getText() == "YOU WANT TO TELEPORT" ) {
+//					jTextField.setVisible(false);
+					if (GameWork.temp1 == 1) {
+						wallet1-= 50;
+					}
+					else if (GameWork.temp1 == 2) {
+						wallet2-= 50;
+					}
+					else if (GameWork.temp1 == 3) {
+						wallet3-= 50;
+					}
+					else if (GameWork.temp1 == 4) {
+						wallet4-= 50;
+					}
 				}
 				
 				else {
-					markTurn[GameWork.temp] = GameWork.temp1;
-					mark[GameWork.temp] = checkbox();
+					if (markTurn[GameWork.temp] == 0) {
+						markTurn[GameWork.temp] = GameWork.temp1;
+						mark[GameWork.temp] = checkbox();
+					}
+					else if (markTurn[GameWork.temp] == GameWork.temp1) {
+						lose = 0;
+					}
 				}
 				buyMoney();
 				drawN = true;
@@ -158,9 +205,12 @@ public class controller extends JFrame implements ItemListener{
 	
 	}
 	
-	public void workBlack(int t) {
-		black[t] = 1;
-	}
+//	public int workTele() {
+//		jTextField.setVisible(true);
+//		String teleString = jTextField.getText();
+//		tele = Integer.parseInt(teleString);
+//		return tele;
+//	}
 	
 	public void setCost() {
 		for (int i = 0; i<32; i++) {
@@ -317,20 +367,25 @@ public class controller extends JFrame implements ItemListener{
 		jPanel.add(jCheckBox3);
 		jPanel.add(jCheckBox4);
 		jPanel.add(Box.createRigidArea(new Dimension(600, 50)));
-	  
+		jPanel.add(jButton1);
         jPanel.add(jButton);
+        jPanel.add(Box.createRigidArea(new Dimension(600, 50)));
+//        jPanel.add(jTextField);
+//        jTextField.setVisible(false);
 	}
 	
 	
 	//voi o khong co chuc nang
 	public void init1() {
-	
-	    jButton.setText("DON'T UP");
+		if (markTurn[GameWork.temp] != GameWork.temp1) {
+			jButton.setText("BUY?");
+		} else
+			jButton.setText("DON'T UP");
 	    jCheckBox1.setVisible(true);
 	    jCheckBox2.setVisible(true);
 	    jCheckBox3.setVisible(true);
 	    jCheckBox4.setVisible(true);
- 
+	    jButton1.setVisible(true);
 	}
 	
 	//tru tiwn khi mua
@@ -495,7 +550,7 @@ public class controller extends JFrame implements ItemListener{
 	    jCheckBox2.setVisible(false);
 	    jCheckBox3.setVisible(false);
 	    jCheckBox4.setVisible(false);
-	
+	    jButton1.setVisible(false);
 	}
 	
 	//o K, I, N, G
@@ -515,6 +570,8 @@ public class controller extends JFrame implements ItemListener{
 	    jCheckBox2.setVisible(false);
 	    jCheckBox3.setVisible(false);
 	    jCheckBox4.setVisible(false);
+	    jButton1.setVisible(false);
+	    black[GameWork.temp1] = 1;
 	}
 	
 	// o may man
@@ -525,6 +582,7 @@ public class controller extends JFrame implements ItemListener{
 	    jCheckBox2.setVisible(false);
 	    jCheckBox3.setVisible(false);
 	    jCheckBox4.setVisible(false);
+	    jButton1.setVisible(false);
 	}
 	
 	//o world cup
@@ -535,6 +593,7 @@ public class controller extends JFrame implements ItemListener{
 	    jCheckBox2.setVisible(false);
 	    jCheckBox3.setVisible(false);
 	    jCheckBox4.setVisible(false);
+	   
 	}
 	
 	//o teleport
@@ -545,6 +604,8 @@ public class controller extends JFrame implements ItemListener{
 	    jCheckBox2.setVisible(false);
 	    jCheckBox3.setVisible(false);
 	    jCheckBox4.setVisible(false);
+	    
+	    
 	}
 	
 	//nop thue
@@ -555,6 +616,7 @@ public class controller extends JFrame implements ItemListener{
 	    jCheckBox2.setVisible(false);
 	    jCheckBox3.setVisible(false);
 	    jCheckBox4.setVisible(false);
+	    jButton1.setVisible(false);
 	}
 	
 	
@@ -571,7 +633,14 @@ public class controller extends JFrame implements ItemListener{
 			
 		}
 		if (i == 3) {
-			
+			jCheckBox1.setSelected(true);
+			jCheckBox2.setSelected(true);
+			jCheckBox3.setSelected(true);
+			jCheckBox4.setSelected(true);
+			jCheckBox1.setEnabled(false);
+			jCheckBox2.setEnabled(false);
+			jCheckBox3.setEnabled(false);
+			jCheckBox4.setEnabled(false);
 		}
 		
 		if (i == 2) {
@@ -733,13 +802,28 @@ public class controller extends JFrame implements ItemListener{
 	}
 	
 	public int losePlayer() {
-		if (wallet1 < 0) return 1;
-		if (wallet2 < 0) return 2;
-		if (wallet3 < 0) return 3;
-		if (wallet4 < 0) return 4;
+		if (wallet1 < 0) lostPlayer[1] = 1;
+		if (wallet2 < 0) lostPlayer[2] = 1;
+		if (wallet3 < 0) lostPlayer[3] = 1;
+		if (wallet4 < 0) lostPlayer[4] = 1;
+		for (int i = 0; i < 5; i++) {
+			if(lostPlayer[i] == 1) {
+				return 1;
+			}
+		}
 		return 0;
 	}
 	
+	
+	
+	public int[] getLostPlayer() {
+		return lostPlayer;
+	}
+
+	public void setLostPlayer(int[] lostPlayer) {
+		this.lostPlayer = lostPlayer;
+	}
+
 	public int[] getBlack() {
 		return black;
 	}
